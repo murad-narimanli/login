@@ -1,0 +1,93 @@
+import React  , {useState}  from 'react';
+
+// material imports
+import { Typography , Paper , Avatar , Button  , FormControl , Input , InputLabel} from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import withStyles from "@material-ui/core/styles/withStyles";
+//alert
+import alertify from 'alertifyjs'
+
+// react router dom
+import { Link , withRouter } from 'react-router-dom'
+//import firebase
+import firebase from "../firebase";
+
+const styles = theme => ({
+    main:{
+        width:'auto',
+        display: 'block',
+        marginLeft:theme.spacing(3) ,
+        marginRight:theme.spacing(3) ,
+        [theme.breakpoints.up(400 + theme.spacing(6))]:{
+            width: 400 ,
+            marginLeft: 'auto',
+            marginRight: 'auto'
+        },
+    },
+    paper: {
+        marginTop: theme.spacing(10),
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        padding:`${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`
+    },
+    avatar:{
+        margin:theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main
+    },
+    submit:{
+        marginTop: theme.spacing(2)
+    },
+    form:{
+        width: '100%',
+        marginTop: theme.spacing(1)
+    }
+})
+
+function Login(props) {
+    const {classes} = props
+    const [passs , setPass] = useState('');
+    const [mails,  setMail ] = useState('')
+    return (
+        <main className={classes.main}>
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon/>
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Log In
+                </Typography>
+                <form className={classes.form} onSubmit={e=> e.preventDefault() && false}>
+
+                    <FormControl margin='normal' required fullWidth >
+                        <InputLabel htmlFor="email">Email</InputLabel>
+                        <Input value={mails} onChange={e => setMail(e.target.value)} name="email" id="email" autoComplete='off' autoFocus ></Input>
+                    </FormControl>
+
+                    <FormControl margin='normal' required fullWidth>
+                        <InputLabel htmlFor="pass">Password</InputLabel>
+                        <Input value={passs} onChange={e=> setPass(e.target.value)} name="pass" id="pass" type='password' autoComplete='off' autoFocus ></Input>
+                    </FormControl>
+
+                </form>
+                <Button className={classes.submit} type="submit" fullWidth variant="outlined" color="primary" onClick={onLogin}>Login</Button>
+                <Button className={classes.submit} type="submit" fullWidth variant="outlined" color="primary" component={Link} to={'/register'} >Register</Button>
+                <Button className={classes.submit} type="submit" fullWidth variant="outlined" color="secondary" component={Link} to={'/'}>Home page</Button>
+            </Paper>
+        </main>
+    );
+    
+    async function onLogin (){
+        try{
+            await  firebase.login(mails,passs)
+            props.history.replace('/dashboard')
+        }catch (err) {
+            alertify.set('notifier','position', 'top-right');
+            alertify.error(err.message)
+        }
+    }
+    
+}
+
+
+export default withRouter(withStyles(styles)(Login));
