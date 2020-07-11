@@ -1,3 +1,7 @@
+THIS IS A FIREBASE LOGIN AND SINGUP APPLICATION YOU CAN USE FIREBASE FOR LOGIN OF USERS 
+TRY REGISTER AND THEN LOGG IN
+
+
 You can see live demo https://loginforms.netlify.app/
 
 For start 
