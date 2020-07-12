@@ -4,9 +4,10 @@ import React from 'react';
 import { Typography , Paper , Avatar , Button } from '@material-ui/core';
 import   VerifiedUserOutlined   from '@material-ui/icons/VerifiedUserOutlined';
 import withStyles from "@material-ui/core/styles/withStyles";
-
+import firebase from "../firebase";
 // react router dom
-import { Link } from 'react-router-dom'
+import { Link , Redirect } from 'react-router-dom'
+import alertify from "alertifyjs";
 
 const styles = theme => ({
     main:{
@@ -38,7 +39,8 @@ const styles = theme => ({
 
 function Homepage(props) {
     const {classes} = props
-    return (
+
+    return !firebase.getUsername() ? (
        <main className={classes.main}>
             <Paper className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -52,7 +54,7 @@ function Homepage(props) {
                 <Button className={classes.submit} type="submit" fullWidth variant="outlined" color="secondary" component={Link} to={'/dashboard'}>Dashboard</Button>
             </Paper>
        </main>
-    );
+    ):<Redirect to={'/dashboard'} />
 }
 
 
